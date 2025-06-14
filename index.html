@@ -272,105 +272,100 @@ Osama Block,NK Concept School 0322-2613213 </div>
 
     <script>
         let qualificationCount = 1;
-        let experienceCount = 1;
-        const maxQualifications = 3;
-        const maxExperiences = 3;
+let experienceCount = 1;
 
-        // Add qualification functionality
-        document.getElementById('addQualification').addEventListener('click', function() {
-            if (qualificationCount < maxQualifications) {
-                qualificationCount++;
-                const container = document.getElementById('qualificationsContainer');
-                const newQualification = document.createElement('div');
-                newQualification.className = 'qualification-entry border-l-4 border-blue-500 pl-4 mb-6';
-                newQualification.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="text-lg font-semibold text-gray-800">Qualification ${qualificationCount}</h3>
-                        <button type="button" class="remove-qualification text-red-500 hover:text-red-700" onclick="removeQualification(this)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Recent Qualification</label>
-                            <input type="text" name="qualification[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Year Award</label>
-                            <input type="text" name="yearAward[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Grade/CGPA</label>
-                            <input type="text" name="gradeCgpa[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Board/University</label>
-                            <input type="text" name="boardUniversity[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                    </div>
-                `;
-                container.appendChild(newQualification);
-                
-                if (qualificationCount >= maxQualifications) {
-                    this.style.display = 'none';
-                }
-            }
-        });
+// Add qualification functionality
+document.getElementById('addQualification').addEventListener('click', function() {
+    qualificationCount++;
+    const container = document.getElementById('qualificationsContainer');
+    const newQualification = document.createElement('div');
+    newQualification.className = 'qualification-entry border-l-4 border-blue-500 pl-4 mb-6';
+    newQualification.innerHTML = `
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="text-lg font-semibold text-gray-800">Qualification ${qualificationCount}</h3>
+            <button type="button" class="remove-qualification text-red-500 hover:text-red-700" onclick="removeQualification(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Recent Qualification</label>
+                <input type="text" name="qualification[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Year Award</label>
+                <input type="text" name="yearAward[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Grade/CGPA</label>
+                <input type="text" name="gradeCgpa[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Board/University</label>
+                <input type="text" name="boardUniversity[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+        </div>
+    `;
+    container.appendChild(newQualification);
+});
 
-        // Add experience functionality
-        document.getElementById('addExperience').addEventListener('click', function() {
-            if (experienceCount < maxExperiences) {
-                experienceCount++;
-                const container = document.getElementById('experienceContainer');
-                const newExperience = document.createElement('div');
-                newExperience.className = 'experience-entry border-l-4 border-green-500 pl-4 mb-6';
-                newExperience.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="text-lg font-semibold text-gray-800">Experience ${experienceCount}</h3>
-                        <button type="button" class="remove-experience text-red-500 hover:text-red-700" onclick="removeExperience(this)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
-                            <input type="text" name="companyName[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Designation</label>
-                            <input type="text" name="designation[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Experience Duration</label>
-                            <input type="text" name="experienceDuration[]" placeholder="e.g., 2 years" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                    </div>
-                `;
-                container.appendChild(newExperience);
-                
-                if (experienceCount >= maxExperiences) {
-                    this.style.display = 'none';
-                }
-            }
-        });
+// Add experience functionality
+document.getElementById('addExperience').addEventListener('click', function() {
+    experienceCount++;
+    const container = document.getElementById('experienceContainer');
+    const newExperience = document.createElement('div');
+    newExperience.className = 'experience-entry border-l-4 border-green-500 pl-4 mb-6';
+    newExperience.innerHTML = `
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="text-lg font-semibold text-gray-800">Experience ${experienceCount}</h3>
+            <button type="button" class="remove-experience text-red-500 hover:text-red-700" onclick="removeExperience(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                <input type="text" name="companyName[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Designation</label>
+                <input type="text" name="designation[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Experience Duration</label>
+                <input type="text" name="experienceDuration[]" placeholder="e.g., 2 years" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+        </div>
+    `;
+    container.appendChild(newExperience);
+});
 
-        // Remove qualification function
-        function removeQualification(button) {
-            button.closest('.qualification-entry').remove();
-            qualificationCount--;
-            document.getElementById('addQualification').style.display = 'inline-block';
-            updateQualificationNumbers();
-        }
+// Remove qualification
+function removeQualification(button) {
+    button.closest('.qualification-entry').remove();
+    qualificationCount--;
+    updateQualificationNumbers();
+}
 
-        // Remove experience function
-        function removeExperience(button) {
-            button.closest('.experience-entry').remove();
-            experienceCount--;
-            document.getElementById('addExperience').style.display = 'inline-block';
-            updateExperienceNumbers();
-        }
+// Remove experience
+function removeExperience(button) {
+    button.closest('.experience-entry').remove();
+    experienceCount--;
+    updateExperienceNumbers();
+}
 
-        // Update qualification numbers
+// Update numbering after remove
+function updateQualificationNumbers() {
+    document.querySelectorAll('.qualification-entry h3').forEach((h3, i) => {
+        h3.textContent = `Qualification ${i + 1}`;
+    });
+}
+function updateExperienceNumbers() {
+    document.querySelectorAll('.experience-entry h3').forEach((h3, i) => {
+        h3.textContent = `Experience ${i + 1}`;
+    });
+}
+    // Update qualification numbers
         function updateQualificationNumbers() {
             const qualifications = document.querySelectorAll('.qualification-entry h3');
             qualifications.forEach((h3, index) => {
