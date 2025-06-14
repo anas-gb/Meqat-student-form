@@ -252,7 +252,7 @@ Osama Block,NK Concept School 0322-2613213 </div>
             <!-- PDF Generation Section -->
             <div class="form-section bg-white p-6 no-print">
                 <h2 class="text-xl font-bold text-blue-800 mb-4 border-b-2 border-blue-200 pb-2">
-                    <i class="fas fa-download mr-2"></i>DOWNLOAD & SHARE
+                    <i class="fas fa-download mr-2"></i>DOWNLOAD 
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                     <div class="md:col-span-2">
@@ -263,9 +263,7 @@ Osama Block,NK Concept School 0322-2613213 </div>
                         <button type="button" id="downloadPDF" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition-colors">
                             <i class="fas fa-download mr-2"></i>Download PDF
                         </button>
-                        <button type="button" id="shareWhatsApp" class="whatsapp-btn text-white px-6 py-3 rounded-md font-medium transition-all">
-                            <i class="fab fa-whatsapp mr-2"></i>Send to Agency
-                        </button>
+                       
                     </div>
                 </div>
             </div>
@@ -398,14 +396,7 @@ Osama Block,NK Concept School 0322-2613213 </div>
         });
 
         // WhatsApp sharing
-        document.getElementById('shareWhatsApp').addEventListener('click', function() {
-            const filename = document.getElementById('pdfFilename').value || 'student_application_form';
-            generatePDF(filename, true);
-        });
-
-        function generatePDF(filename, shareWhatsApp = false) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+        
             
             // Set up the PDF
             doc.setFontSize(16);
@@ -523,24 +514,7 @@ Osama Block,NK Concept School 0322-2613213 </div>
             ]);
 
             if (shareWhatsApp) {
-                // For WhatsApp sharing, we'll create a data URL and share via WhatsApp
-                const pdfDataUri = doc.output('datauristring');
-                const applicantName = document.getElementById('applicantName').value || 'Student';
-                const message = `Hi! I'm ${applicantName} and I've filled out my student application form. Please find my details attached.`;
-                const whatsappUrl = `https://wa.me/923398889957?text=${encodeURIComponent(message)}`;
-                
-                // Note: Due to WhatsApp limitations, we can't directly send files via URL
-                // So we'll download the PDF and ask user to share manually
-                doc.save(`${filename}.pdf`);
-                setTimeout(() => {
-                    window.open(whatsappUrl, '_blank');
-                    alert('PDF downloaded! Please attach the downloaded PDF to your WhatsApp message.');
-                }, 1000);
-            } else {
-                // Regular download
-                doc.save(`${filename}.pdf`);
-            }
-        }
+           
 
         // Auto-fill signature date
         document.getElementById('signatureDate').valueAsDate = new Date();
