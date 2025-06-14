@@ -6,7 +6,9 @@
     <title>Meqat Study Consultants - Student Application Form</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <!-- jsPDF and jsPDF Autotable for advanced PDF layout -->
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
     <style>
         @media print {
             body { margin: 0; padding: 0; }
@@ -40,16 +42,15 @@
                 <h1 class="text-3xl font-bold text-blue-800 mb-2">Meqat Study Consultants</h1>
                 <p class="text-lg text-gray-600 mb-4">Start your professional journey to a brighter future here</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
-                    <div><i class="fas fa-map-marker-alt text-red-500"></i> <strong>KARACHI:</strong> HEAD OFFICE PAKISTAN OFFICE NO: M-1-4, Mezzanine Floor, Jeddah Center, Raja Ghazanfar Ali Rd, Saddar,Karachi, Pakistan</div>
+                    <div><i class="fas fa-map-marker-alt text-red-500"></i> <strong>KARACHI:</strong> HEAD OFFICE PAKISTAN OFFICE NO: M-1-4, Mezzanine Floor, Jeddah Center, Raja Ghazanfar Ali Rd, Karachi</div>
                     <div><i class="fas fa-map-marker-alt text-red-500"></i> <strong>UNITED KINGDOM:</strong> 38 Harrogate Rd, Nottingham NG37GW,UK</div>
                     <div><i class="fas fa-map-marker-alt text-red-500"></i> <strong>SAUDI ARABIA:</strong> Khobar Eastern Region KSA = 966 50863 3828</div>
-                    <div><i class="fas fa-map-marker-alt text-red-500"></i> <strong>Lahore:</strong>Office No, 77, 78,
-Osama Block,NK Concept School 0322-2613213 </div>
+                    <div><i class="fas fa-map-marker-alt text-red-500"></i> <strong>Lahore:</strong>Office No, 77, 78, Osama Block,NK Concept School 0322-2613213 </div>
                 </div>
             </div>
         </div>
 
-        <form id="applicationForm" class="space-y-6">
+        <form id="applicationForm" class="space-y-6" onsubmit="return false;">
             <!-- Personal Information -->
             <div class="form-section bg-white p-6">
                 <h2 class="text-xl font-bold text-blue-800 mb-4 border-b-2 border-blue-200 pb-2">
@@ -98,7 +99,6 @@ Osama Block,NK Concept School 0322-2613213 </div>
                 <h2 class="text-xl font-bold text-blue-800 mb-4 border-b-2 border-blue-200 pb-2">
                     <i class="fas fa-graduation-cap mr-2"></i>EDUCATIONAL INFORMATION
                 </h2>
-                
                 <div id="qualificationsContainer">
                     <div class="qualification-entry border-l-4 border-blue-500 pl-4 mb-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">Qualification 1</h3>
@@ -122,11 +122,9 @@ Osama Block,NK Concept School 0322-2613213 </div>
                         </div>
                     </div>
                 </div>
-                
                 <button type="button" id="addQualification" class="add-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mb-4">
                     <i class="fas fa-plus mr-2"></i>Add Another Qualification
                 </button>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">English Test</label>
@@ -144,7 +142,6 @@ Osama Block,NK Concept School 0322-2613213 </div>
                 <h2 class="text-xl font-bold text-blue-800 mb-4 border-b-2 border-blue-200 pb-2">
                     <i class="fas fa-briefcase mr-2"></i>WORK EXPERIENCE OR BUSINESS DETAILS
                 </h2>
-                
                 <div id="experienceContainer">
                     <div class="experience-entry border-l-4 border-green-500 pl-4 mb-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-3">Experience 1</h3>
@@ -164,7 +161,6 @@ Osama Block,NK Concept School 0322-2613213 </div>
                         </div>
                     </div>
                 </div>
-                
                 <button type="button" id="addExperience" class="add-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">
                     <i class="fas fa-plus mr-2"></i>Add Another Experience
                 </button>
@@ -263,7 +259,6 @@ Osama Block,NK Concept School 0322-2613213 </div>
                         <button type="button" id="downloadPDF" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition-colors">
                             <i class="fas fa-download mr-2"></i>Download PDF
                         </button>
-                       
                     </div>
                 </div>
             </div>
@@ -272,248 +267,103 @@ Osama Block,NK Concept School 0322-2613213 </div>
 
     <script>
         let qualificationCount = 1;
-let experienceCount = 1;
+        let experienceCount = 1;
 
-// Add qualification functionality
-document.getElementById('addQualification').addEventListener('click', function() {
-    qualificationCount++;
-    const container = document.getElementById('qualificationsContainer');
-    const newQualification = document.createElement('div');
-    newQualification.className = 'qualification-entry border-l-4 border-blue-500 pl-4 mb-6';
-    newQualification.innerHTML = `
-        <div class="flex justify-between items-center mb-3">
-            <h3 class="text-lg font-semibold text-gray-800">Qualification ${qualificationCount}</h3>
-            <button type="button" class="remove-qualification text-red-500 hover:text-red-700" onclick="removeQualification(this)">
-                <i class="fas fa-trash"></i>
-            </button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Recent Qualification</label>
-                <input type="text" name="qualification[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Year Award</label>
-                <input type="text" name="yearAward[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Grade/CGPA</label>
-                <input type="text" name="gradeCgpa[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Board/University</label>
-                <input type="text" name="boardUniversity[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-        </div>
-    `;
-    container.appendChild(newQualification);
-});
-
-// Add experience functionality
-document.getElementById('addExperience').addEventListener('click', function() {
-    experienceCount++;
-    const container = document.getElementById('experienceContainer');
-    const newExperience = document.createElement('div');
-    newExperience.className = 'experience-entry border-l-4 border-green-500 pl-4 mb-6';
-    newExperience.innerHTML = `
-        <div class="flex justify-between items-center mb-3">
-            <h3 class="text-lg font-semibold text-gray-800">Experience ${experienceCount}</h3>
-            <button type="button" class="remove-experience text-red-500 hover:text-red-700" onclick="removeExperience(this)">
-                <i class="fas fa-trash"></i>
-            </button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
-                <input type="text" name="companyName[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Designation</label>
-                <input type="text" name="designation[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Experience Duration</label>
-                <input type="text" name="experienceDuration[]" placeholder="e.g., 2 years" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-        </div>
-    `;
-    container.appendChild(newExperience);
-});
-
-// Remove qualification
-function removeQualification(button) {
-    button.closest('.qualification-entry').remove();
-    qualificationCount--;
-    updateQualificationNumbers();
-}
-
-// Remove experience
-function removeExperience(button) {
-    button.closest('.experience-entry').remove();
-    experienceCount--;
-    updateExperienceNumbers();
-}
-
-// Update numbering after remove
-function updateQualificationNumbers() {
-    document.querySelectorAll('.qualification-entry h3').forEach((h3, i) => {
-        h3.textContent = `Qualification ${i + 1}`;
-    });
-}
-function updateExperienceNumbers() {
-    document.querySelectorAll('.experience-entry h3').forEach((h3, i) => {
-        h3.textContent = `Experience ${i + 1}`;
-    });
-}
-    // Update qualification numbers
-        function updateQualificationNumbers() {
-            const qualifications = document.querySelectorAll('.qualification-entry h3');
-            qualifications.forEach((h3, index) => {
-                h3.textContent = `Qualification ${index + 1}`;
-            });
-        }
-
-        // Update experience numbers
-        function updateExperienceNumbers() {
-            const experiences = document.querySelectorAll('.experience-entry h3');
-            experiences.forEach((h3, index) => {
-                h3.textContent = `Experience ${index + 1}`;
-            });
-        }
-
-        // Set default date
-        document.getElementById('signatureDate').valueAsDate = new Date();
-
-        // PDF Generation
-        document.getElementById('downloadPDF').addEventListener('click', function() {
-            const filename = document.getElementById('pdfFilename').value || 'student_application_form';
-            generatePDF(filename, false);
+        // Add qualification functionality
+        document.getElementById('addQualification').addEventListener('click', function() {
+            qualificationCount++;
+            const container = document.getElementById('qualificationsContainer');
+            const newQualification = document.createElement('div');
+            newQualification.className = 'qualification-entry border-l-4 border-blue-500 pl-4 mb-6';
+            newQualification.innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Qualification ${qualificationCount}</h3>
+                    <button type="button" class="remove-qualification text-red-500 hover:text-red-700" onclick="removeQualification(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Recent Qualification</label>
+                        <input type="text" name="qualification[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Year Award</label>
+                        <input type="text" name="yearAward[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Grade/CGPA</label>
+                        <input type="text" name="gradeCgpa[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Board/University</label>
+                        <input type="text" name="boardUniversity[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+            `;
+            container.appendChild(newQualification);
         });
 
-        // WhatsApp sharing
-        
-            
-            // Set up the PDF
-            doc.setFontSize(16);
-            doc.setFont(undefined, 'bold');
-            doc.text('Meqat Study Consultants', 105, 20, { align: 'center' });
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
-            doc.text('Student Application Form', 105, 30, { align: 'center' });
-            
-            let yPos = 50;
-            const lineHeight = 8;
-            const leftMargin = 20;
-            const rightMargin = 190;
-            
-            // Helper function to add section
-            function addSection(title, fields) {
-                doc.setFont(undefined, 'bold');
-                doc.text(title, leftMargin, yPos);
-                yPos += lineHeight;
-                doc.line(leftMargin, yPos, rightMargin, yPos);
-                yPos += lineHeight;
-                
-                doc.setFont(undefined, 'normal');
-                fields.forEach(field => {
-                    if (field.value && field.value.trim()) {
-                        const text = `${field.label}: ${field.value}`;
-                        const lines = doc.splitTextToSize(text, rightMargin - leftMargin);
-                        lines.forEach(line => {
-                            if (yPos > 270) {
-                                doc.addPage();
-                                yPos = 20;
-                            }
-                            doc.text(line, leftMargin, yPos);
-                            yPos += lineHeight;
-                        });
-                    }
-                });
-                yPos += 5;
-            }
+        // Add experience functionality
+        document.getElementById('addExperience').addEventListener('click', function() {
+            experienceCount++;
+            const container = document.getElementById('experienceContainer');
+            const newExperience = document.createElement('div');
+            newExperience.className = 'experience-entry border-l-4 border-green-500 pl-4 mb-6';
+            newExperience.innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Experience ${experienceCount}</h3>
+                    <button type="button" class="remove-experience text-red-500 hover:text-red-700" onclick="removeExperience(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                        <input type="text" name="companyName[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Designation</label>
+                        <input type="text" name="designation[]" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Experience Duration</label>
+                        <input type="text" name="experienceDuration[]" placeholder="e.g., 2 years" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+            `;
+            container.appendChild(newExperience);
+        });
 
-            // Personal Information
-            addSection('PERSONAL INFORMATION', [
-                { label: 'Applicant Name', value: document.getElementById('applicantName').value },
-                { label: 'Date of Birth', value: document.getElementById('dateOfBirth').value },
-                { label: 'Father\'s Name', value: document.getElementById('fatherName').value },
-                { label: 'Marital Status', value: document.getElementById('maritalStatus').value },
-                { label: 'Mobile No.', value: document.getElementById('mobileNo').value },
-                { label: 'Email', value: document.getElementById('email').value },
-                { label: 'WhatsApp No.', value: document.getElementById('whatsappNo').value }
-            ]);
+        // Remove qualification
+        window.removeQualification = function(button) {
+            button.closest('.qualification-entry').remove();
+            qualificationCount--;
+            updateQualificationNumbers();
+        };
 
-            // Educational Information
-            const qualifications = [];
-            document.querySelectorAll('.qualification-entry').forEach((entry, index) => {
-                const qual = entry.querySelector('input[name="qualification[]"]').value;
-                const year = entry.querySelector('input[name="yearAward[]"]').value;
-                const grade = entry.querySelector('input[name="gradeCgpa[]"]').value;
-                const board = entry.querySelector('input[name="boardUniversity[]"]').value;
-                
-                if (qual || year || grade || board) {
-                    qualifications.push({
-                        label: `Qualification ${index + 1}`,
-                        value: `${qual} | Year: ${year} | Grade: ${grade} | Board/University: ${board}`
-                    });
-                }
+        // Remove experience
+        window.removeExperience = function(button) {
+            button.closest('.experience-entry').remove();
+            experienceCount--;
+            updateExperienceNumbers();
+        };
+
+        // Update numbering after remove
+        function updateQualificationNumbers() {
+            document.querySelectorAll('.qualification-entry h3').forEach((h3, i) => {
+                h3.textContent = `Qualification ${i + 1}`;
             });
-
-            qualifications.push(
-                { label: 'English Test', value: document.getElementById('englishTest').value },
-                { label: 'Subject', value: document.getElementById('subject').value }
-            );
-
-            addSection('EDUCATIONAL INFORMATION', qualifications);
-
-            // Work Experience
-            const experiences = [];
-            document.querySelectorAll('.experience-entry').forEach((entry, index) => {
-                const company = entry.querySelector('input[name="companyName[]"]').value;
-                const designation = entry.querySelector('input[name="designation[]"]').value;
-                const duration = entry.querySelector('input[name="experienceDuration[]"]').value;
-                
-                if (company || designation || duration) {
-                    experiences.push({
-                        label: `Experience ${index + 1}`,
-                        value: `${company} | ${designation} | ${duration}`
-                    });
-                }
+        }
+        function updateExperienceNumbers() {
+            document.querySelectorAll('.experience-entry h3').forEach((h3, i) => {
+                h3.textContent = `Experience ${i + 1}`;
             });
+        }
 
-            addSection('WORK EXPERIENCE', experiences);
-
-            // Visa Processing Information
-            addSection('VISA PROCESSING INFORMATION', [
-                { label: 'Last Country Visited for Study', value: document.getElementById('lastCountryStudy').value },
-                { label: 'Country of Choice', value: document.getElementById('countryChoice').value },
-                { label: 'University/Program', value: document.getElementById('universityProgram').value },
-                { label: 'Passport Number', value: document.getElementById('passportNumber').value },
-                { label: 'Why Study Abroad', value: document.getElementById('whyStudyAbroad').value },
-                { label: 'Balance in Current Country', value: document.getElementById('balanceCurrentCountry').value },
-                { label: 'Visa History', value: document.getElementById('visaHistory').value }
-            ]);
-
-            // Friend References
-            addSection('FRIEND REFERENCES', [
-                { label: 'Friend 1 Name', value: document.getElementById('friend1Name').value },
-                { label: 'Friend 1 WhatsApp', value: document.getElementById('friend1WhatsApp').value },
-                { label: 'Friend 2 Name', value: document.getElementById('friend2Name').value },
-                { label: 'Friend 2 WhatsApp', value: document.getElementById('friend2WhatsApp').value }
-            ]);
-
-            // Signature
-            addSection('SIGNATURE', [
-                { label: 'Date', value: document.getElementById('signatureDate').value },
-                { label: 'Applicant Signature', value: document.getElementById('applicantSignature').value }
-            ]);
-
-            if (shareWhatsApp) {
-           
-
-        // Auto-fill signature date
+        // Set default date for signature
         document.getElementById('signatureDate').valueAsDate = new Date();
-        
+
         // Set default filename based on applicant name
         document.getElementById('applicantName').addEventListener('input', function() {
             const name = this.value.replace(/\s+/g, '_').toLowerCase();
@@ -521,6 +371,187 @@ function updateExperienceNumbers() {
                 document.getElementById('pdfFilename').value = `${name}_application_form`;
             }
         });
+
+        // PDF Generation
+        document.getElementById('downloadPDF').addEventListener('click', function() {
+            // Optionally add validation here
+            const filename = document.getElementById('pdfFilename').value || 'student_application_form';
+            generatePDF(filename);
+        });
+
+        function generatePDF(filename) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF("p", "mm", "a4");
+            const pageWidth = doc.internal.pageSize.getWidth();
+            let y = 15;
+
+            // Branding Header
+            doc.setDrawColor(41, 128, 185);
+            doc.setFillColor(41, 128, 185);
+            doc.rect(0, 0, pageWidth, 20, "F");
+            doc.setFontSize(20);
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.text("Meqat Study Consultants", pageWidth / 2, 12, { align: "center" });
+            doc.setFontSize(12);
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "normal");
+            doc.text("Student Application Form", pageWidth / 2, 18, { align: "center" });
+
+            y = 28;
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text("Start your professional journey to a brighter future here", pageWidth / 2, y, { align: "center" });
+            y += 6;
+
+            // Section Helper
+            function sectionTitle(title) {
+                y += 8;
+                doc.setTextColor(41, 128, 185);
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "bold");
+                doc.text(title, 12, y);
+                y += 2;
+                doc.setDrawColor(41, 128, 185);
+                doc.setLineWidth(0.5);
+                doc.line(12, y, pageWidth - 12, y);
+                y += 3;
+                doc.setFontSize(11);
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(50, 50, 50);
+            }
+
+            // Section: Personal Information
+            sectionTitle("PERSONAL INFORMATION");
+            const personal = [
+                ["Applicant Name", document.getElementById("applicantName").value],
+                ["Date of Birth", document.getElementById("dateOfBirth").value],
+                ["Father's Name", document.getElementById("fatherName").value],
+                ["Marital Status", document.getElementById("maritalStatus").value],
+                ["Mobile No.", document.getElementById("mobileNo").value],
+                ["Email", document.getElementById("email").value],
+                ["WhatsApp No.", document.getElementById("whatsappNo").value]
+            ];
+            doc.autoTable({
+                startY: y,
+                head: [["Field", "Value"]],
+                body: personal,
+                theme: "grid",
+                headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+                styles: { fontSize: 10, cellPadding: 2 },
+                margin: { left: 12, right: 12 }
+            });
+            y = doc.lastAutoTable.finalY + 5;
+
+            // Section: Educational Information
+            sectionTitle("EDUCATIONAL INFORMATION");
+            // Gather qualifications
+            const qualRows = [];
+            document.querySelectorAll('.qualification-entry').forEach((entry, i) => {
+                qualRows.push([
+                    entry.querySelector('input[name="qualification[]"]').value,
+                    entry.querySelector('input[name="yearAward[]"]').value,
+                    entry.querySelector('input[name="gradeCgpa[]"]').value,
+                    entry.querySelector('input[name="boardUniversity[]"]').value
+                ]);
+            });
+            doc.autoTable({
+                startY: y,
+                head: [["Recent Qualification", "Year Award", "Grade/CGPA", "Board/University"]],
+                body: qualRows,
+                theme: "striped",
+                headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+                styles: { fontSize: 10, cellPadding: 2 },
+                margin: { left: 12, right: 12 }
+            });
+            y = doc.lastAutoTable.finalY + 3;
+
+            // English Test & Subject
+            const englishTest = document.getElementById("englishTest").value;
+            const subject = document.getElementById("subject").value;
+            if (englishTest || subject) {
+                doc.setFontSize(11);
+                if (englishTest) doc.text(`English Test: ${englishTest}`, 14, y += 7);
+                if (subject) doc.text(`Subject: ${subject}`, 14, y += 7);
+            }
+            y += 2;
+
+            // Section: Work Experience
+            sectionTitle("WORK EXPERIENCE OR BUSINESS DETAILS");
+            const expRows = [];
+            document.querySelectorAll('.experience-entry').forEach((entry, i) => {
+                expRows.push([
+                    entry.querySelector('input[name="companyName[]"]').value,
+                    entry.querySelector('input[name="designation[]"]').value,
+                    entry.querySelector('input[name="experienceDuration[]"]').value
+                ]);
+            });
+            doc.autoTable({
+                startY: y,
+                head: [["Company Name", "Designation", "Experience Duration"]],
+                body: expRows,
+                theme: "striped",
+                headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+                styles: { fontSize: 10, cellPadding: 2 },
+                margin: { left: 12, right: 12 }
+            });
+            y = doc.lastAutoTable.finalY + 3;
+
+            // Section: Visa Processing Information
+            sectionTitle("INFORMATION REQUIRED FOR STUDENT VISA PROCESSING");
+            const visaInfo = [
+                ["Last Country Visited for Study", document.getElementById("lastCountryStudy").value],
+                ["Country of Choice", document.getElementById("countryChoice").value],
+                ["University/Program", document.getElementById("universityProgram").value],
+                ["Passport Number", document.getElementById("passportNumber").value],
+                ["Why You Decided to Study Abroad", document.getElementById("whyStudyAbroad").value],
+                ["Any Balance in Current Country", document.getElementById("balanceCurrentCountry").value],
+                ["Visa History or University Application Status", document.getElementById("visaHistory").value]
+            ];
+            doc.autoTable({
+                startY: y,
+                head: [["Field", "Value"]],
+                body: visaInfo,
+                theme: "grid",
+                headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+                styles: { fontSize: 10, cellPadding: 2 },
+                margin: { left: 12, right: 12 }
+            });
+            y = doc.lastAutoTable.finalY + 5;
+
+            // Section: Friends Reference
+            sectionTitle("FRIENDS STUDYING ABROAD");
+            const friends = [
+                ["Friend 1 Name", document.getElementById("friend1Name").value],
+                ["Friend 1 WhatsApp No.", document.getElementById("friend1WhatsApp").value],
+                ["Friend 2 Name", document.getElementById("friend2Name").value],
+                ["Friend 2 WhatsApp No.", document.getElementById("friend2WhatsApp").value]
+            ];
+            doc.autoTable({
+                startY: y,
+                head: [["Field", "Value"]],
+                body: friends,
+                theme: "grid",
+                headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+                styles: { fontSize: 10, cellPadding: 2 },
+                margin: { left: 12, right: 12 }
+            });
+            y = doc.lastAutoTable.finalY + 5;
+
+            // Section: Signature
+            sectionTitle("SIGNATURE");
+            const signDate = document.getElementById("signatureDate").value;
+            const applicantSignature = document.getElementById("applicantSignature").value;
+            doc.text(`Date: ${signDate}`, 14, y += 8);
+            doc.text(`Applicant Signature: ${applicantSignature}`, 14, y += 8);
+
+            // Footer
+            doc.setFontSize(9);
+            doc.setTextColor(170, 170, 170);
+            doc.text("Generated by Meqat Study Consultants Application Form", pageWidth / 2, 290, { align: "center" });
+
+            doc.save(filename + ".pdf");
+        }
     </script>
 </body>
 </html>
